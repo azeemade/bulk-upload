@@ -1,0 +1,38 @@
+{
+  "name": "azeemade/bulk-upload",
+  "description": "Laravel Bulk Upload Package",
+  "type": "library",
+  "license": "MIT",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Azeemade",
+      "email": "adenugaazeem@outlook.com"
+    }
+  ],
+  "require": {
+    "php": "^8.1",
+    "illuminate/support": "^10.0|^11.0|^12.0",
+    "maatwebsite/excel": "^3.1"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^8.0|^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Azeemade\\BulkUpload\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Azeemade\\BulkUpload\\BulkUploadServiceProvider"
+      ],
+      "aliases": {
+        "BulkUpload": "Azeemade\\BulkUpload\\Facades\\BulkUpload"
+      }
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
