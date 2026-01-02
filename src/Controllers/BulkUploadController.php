@@ -33,10 +33,11 @@ class BulkUploadController extends Controller
         $request->validate([
             'model' => 'required|string',
             'file' => 'required|file|mimes:csv,xlsx,xls|max:' . $maxSize,
+            'metadata' => 'nullable|array',
         ]);
 
         try {
-            $bulkUpload = $service->handle($request->get('model'), $request->file('file'));
+            $bulkUpload = $service->handle($request->get('model'), $request->file('file'), $request->get('metadata', []));
             return response()->json([
                 'message' => 'Upload processed successfully',
                 'data' => $bulkUpload

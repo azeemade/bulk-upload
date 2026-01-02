@@ -36,7 +36,7 @@ class BulkUploadService
     /**
      * Handle the upload process.
      */
-    public function handle(string $modelIdentifier, UploadedFile $file)
+    public function handle(string $modelIdentifier, UploadedFile $file, array $metadata = [])
     {
         $modelClass = $this->resolveModel($modelIdentifier);
 
@@ -55,7 +55,9 @@ class BulkUploadService
         // Actually, to decide sync vs queue, we really need the count.
         // Let's use a quick import to count.
         $rows = Excel::toArray(new class implements \Maatwebsite\Excel\Concerns\ToArray {
-            public function array(array $array) {}
+            public function array(array $array)
+            {
+            }
         }, $file);
         // Note: reading whole file to array might be memory intensive for HUGE files.
         // Optimally we'd use a chunk reading or something lighter.
@@ -89,6 +91,7 @@ class BulkUploadService
             'user_id' => $user ? $user->getAuthIdentifier() : null,
             'user_type' => $user ? get_class($user) : null,
             'tenant_id' => $tenantId,
+            'meta' => ['payload' => $metadata],
         ]);
 
         // 5. Decision: Sync or Queue
@@ -139,7 +142,7 @@ class BulkUploadService
         $sample = $model->getTemplateSample();
         $options = $model->getTemplateOptions();
 
-        return new class($columns, $sample, $options) implements \Maatwebsite\Excel\Concerns\FromArray, \Maatwebsite\Excel\Concerns\WithHeadings {
+        return new class ($columns, $sample, $options) implements \Maatwebsite\Excel\Concerns\FromArray, \Maatwebsite\Excel\Concerns\WithHeadings {
             protected $columns;
             protected $sample;
             protected $options;
