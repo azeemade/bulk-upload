@@ -138,10 +138,29 @@ POST /api/bulk-upload/import
 Content-Type: multipart/form-data
 
 model: App\Models\Product
+model: App\Models\Product
 file: (binary)
+metadata[source]: api       # Optional metadata
+metadata[priority]: high
 ```
 
-**Response:**
+#### **Using Metadata in Model**
+
+If you send metadata with the upload request, implement the `setBulkUploadMetadata` method in your model to receive it.
+
+```php
+    /**
+     * Receive metadata from the upload request.
+     */
+    public function setBulkUploadMetadata(array $metadata): void
+    {
+        if (isset($metadata['priority']) && $metadata['priority'] === 'high') {
+            // Handle high priority logic
+        }
+    }
+```
+
+#### **Response:**
 
 ```json
 {
