@@ -23,6 +23,11 @@ class BulkImporter implements ToCollection, WithHeadingRow
         $this->bulkUpload = $bulkUpload;
         $class = $bulkUpload->model_class;
         $this->model = new $class;
+
+        if (method_exists($this->model, 'setBulkUploadMetadata')) {
+            $metadata = $bulkUpload->meta['payload'] ?? [];
+            $this->model->setBulkUploadMetadata($metadata);
+        }
     }
 
     public function collection(Collection $rows)
